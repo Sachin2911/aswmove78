@@ -8,7 +8,7 @@ try:
 except OSError:
     from spacy.cli import download
     download('en_core_web_md')
-    nlp = spacy.load('en')
+    nlp = spacy.load('en_core_web_md')
 synth = "synthesized.csv"
 extjobs = pd.read_csv(synth, index_col=0)
 
