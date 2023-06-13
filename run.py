@@ -34,9 +34,9 @@ def process():
 
     return jsonify(rows_list)
 
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # @app.route('/process', methods=['POST'])
 # def process():
