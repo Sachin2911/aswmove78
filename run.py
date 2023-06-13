@@ -22,18 +22,30 @@ def load_model_and_data():
 # Load the model and data during the initialization phase
 load_model_and_data()
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+from flask import Flask, request, jsonify
 
 @app.route('/process', methods=['POST'])
 def process():
-    prompt = request.form['prompt']
+    data = request.get_json()
+    prompt = data['prompt']
     top_indexes = get_top_sentence_indexes(prompt)
     top_rows = extjobs.iloc[top_indexes]
     rows_list = top_rows.to_dict(orient='records')
 
-    return render_template('result.html', rows=rows_list)
+    return jsonify(rows_list)
+
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
+
+# @app.route('/process', methods=['POST'])
+# def process():
+#     prompt = request.form['prompt']
+#     top_indexes = get_top_sentence_indexes(prompt)
+#     top_rows = extjobs.iloc[top_indexes]
+#     rows_list = top_rows.to_dict(orient='records')
+
+#     return render_template('result.html', rows=rows_list)
 
 def get_top_sentence_indexes(prompt):
     prompt_words = nlp(prompt.lower())
