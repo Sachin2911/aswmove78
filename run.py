@@ -56,4 +56,4 @@ def get_top_sentence_indexes(prompt):
     return top_10_indexes
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=8080)
