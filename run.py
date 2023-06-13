@@ -4,24 +4,30 @@ import pandas as pd
 
 app = Flask(__name__)
 
-try:
-    nlp = spacy.load('en_core_web_md')
-except OSError:
-    from spacy.cli import download
-    download('en_core_web_md')
-    nlp = spacy.load('en_core_web_md')
+nlp = None
 synth = "synthesized.csv"
-extjobs = pd.read_csv(synth, index_col=0)
+extjobs = None
 
+def load_model_and_data():
+    global nlp, extjobs
+    try:
+        nlp = spacy.load('en_core_web_md')
+    except OSError:
+        from spacy.cli import download
+        download('en_core_web_md')
+        nlp = spacy.load('en_core_web_md')
+    
+    extjobs = pd.read_csv(synth, index_col=0)
+
+# Load the model and data during the initialization phase
+load_model_and_data()
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
 @app.route('/process', methods=['POST'])
 def process():
-    
     prompt = request.form['prompt']
     top_indexes = get_top_sentence_indexes(prompt)
     top_rows = extjobs.iloc[top_indexes]
@@ -36,16 +42,13 @@ def get_top_sentence_indexes(prompt):
     all_sentences = []
 
     for column in extjobs.columns:
-        for index, sentence in enumerate(extjobs[column]):
-            if pd.notna(sentence): 
-                tokens = nlp(str(sentence).lower())
-                tokens = [token.text for token in tokens if not token.is_punct and not token.is_stop]
-                doc = nlp(" ".join(tokens))
-
-                similarities = [doc.similarity(nlp(word.lower())) for word in prompt_words]
-
-                max_similarity = max(similarities)
-                all_sentences.append((sentence, max_similarity, index))
+        sentences = extjobs[column].dropna().tolist()
+        tokens = [nlp(str(sentence).lower()) for sentence in sentences]
+        
+        for index, doc in enumerate(nlp.pipe(tokens, disable=["parser", "tagger", "ner"], batch_size=1000)):
+            similarities = [doc.similarity(nlp(word.lower())) for word in prompt_words]
+            max_similarity = max(similarities)
+            all_sentences.append((sentences[index], max_similarity, index))
 
     sorted_sentences = sorted(all_sentences, key=lambda x: x[1], reverse=True)
     top_10_indexes = [item[2] for item in sorted_sentences[:10]]
