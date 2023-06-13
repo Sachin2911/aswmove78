@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Page</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #008000;
+            text-align: center;
+        }
+
+        .container {
+            margin: 50px auto;
+            max-width: 500px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #000000;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #008000;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #005500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Graddeo Job Search</h1>
+    <div class="container">
+        <form action="/process" method="post">
+            <div class="form-group">
+                <label for="prompt">Enter prompts e.g. Roles, Skills, Location</label>
+                <input type="text" id="prompt" name="prompt" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

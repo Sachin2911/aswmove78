@@ -1,0 +1,5 @@
+Flask
+spacy
+pandas
+en-core-web-md
+gunicorn
