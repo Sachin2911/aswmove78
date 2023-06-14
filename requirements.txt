@@ -2,3 +2,4 @@ Flask
 spacy
 pandas
 gunicorn
+ flask_cors
