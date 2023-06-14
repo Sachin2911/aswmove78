@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request
 import spacy
 import pandas as pd
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 nlp = None
 synth = "synthesized.csv"
@@ -33,6 +36,7 @@ def process():
     rows_list = top_rows.to_dict(orient='records')
 
     return jsonify(rows_list)
+
 
 @app.route('/')
 def home():
